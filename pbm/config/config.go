@@ -373,7 +373,7 @@ func (cfg *BackupConf) Clone() *BackupConf {
 		if cfg.Timeouts.Starting != nil || cfg.Timeouts.Waiting != nil {
 			rv.Timeouts = &BackupTimeouts {
 				Starting: cfg.Timeouts.Starting,
-				Waiting:  cfg.Timeouts.Waiting
+				Waiting:  cfg.Timeouts.Waiting,
 			}
 		}
 	}
