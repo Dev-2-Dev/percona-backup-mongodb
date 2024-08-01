@@ -370,9 +370,10 @@ func (cfg *BackupConf) Clone() *BackupConf {
 
 	rv.Priority = maps.Clone(cfg.Priority)
 	if cfg.Timeouts != nil {
-		if cfg.Timeouts.Starting != nil {
-			rv.Timeouts = &BackupTimeouts{
+		if cfg.Timeouts.Starting != nil || cfg.Timeouts.Waiting != nil {
+			rv.Timeouts = &BackupTimeouts {
 				Starting: cfg.Timeouts.Starting,
+				Waiting:  cfg.Timeouts.Waiting
 			}
 		}
 	}
@@ -406,7 +407,7 @@ func (t *BackupTimeouts) WaitingTimeout() time.Duration {
 	}
 
 	return time.Duration(*t.Waiting) * time.Second
-}	
+}
 
 func GetConfig(ctx context.Context, m connect.Client) (*Config, error) {
 	res := m.ConfigCollection().FindOne(ctx, bson.D{{"profile", nil}})
