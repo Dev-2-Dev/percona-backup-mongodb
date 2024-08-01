@@ -119,7 +119,7 @@ func (b *Backup) doLogical(
 		// have replicated to the node we're about to take a backup from
 		// *copying made on a primary but backup does a secondary node
 		l.Debug("wait for tmp users %v", lw)
-		err = waitForWrite(ctx, b.nodeConn, b.timeouts.WaitingTimeout(), lw)
+		err = waitForWrite(ctx, b.nodeConn, util.Ref(b.timeouts.WaitingTimeout()), lw)
 		if err != nil {
 			return errors.Wrap(err, "wait for tmp users and roles replication")
 		}
@@ -226,11 +226,14 @@ func dropTMPcoll(ctx context.Context, uri string) error {
 	return nil
 }
 
-func waitForWrite(ctx context.Context, m *mongo.Client, timeout *uint32, ts primitive.Timestamp) error {
+func waitForWrite(ctx context.Context, m *mongo.Client, timeout *time.Duration, ts primitive.Timestamp) error {
 	var lw primitive.Timestamp
 	var err error
+	var seconds uint32
 
-	for i := 0; i < timout + 1; i++ {
+	seconds = uint32(d.Nanoseconds() / 1_000_000)
+	
+	for i := 0; i < seconds + 1; i++ {
 		lw, err = topo.GetLastWrite(ctx, m, false)
 		if err == nil && lw.Compare(ts) >= 0 {
 			return nil
