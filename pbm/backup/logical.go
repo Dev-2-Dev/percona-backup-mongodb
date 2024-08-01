@@ -231,8 +231,8 @@ func waitForWrite(ctx context.Context, m *mongo.Client, timeout *time.Duration, 
 	var err error
 	var seconds uint32
 
-	seconds = uint32(d.Nanoseconds() / 1_000_000)
-	
+	seconds = uint32(timeout.Nanoseconds() / 1_000_000)
+
 	for i := 0; i < seconds + 1; i++ {
 		lw, err = topo.GetLastWrite(ctx, m, false)
 		if err == nil && lw.Compare(ts) >= 0 {
