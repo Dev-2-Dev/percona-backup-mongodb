@@ -52,6 +52,7 @@ const (
 var (
 	WaitActionStart = time.Second * 15
 	WaitBackupStart = WaitActionStart + PITRcheckRange*12/10 // 33 seconds
+	WaitOpDone = time.Second * 30
 )
 
 type NodeHealth int
