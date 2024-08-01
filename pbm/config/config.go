@@ -387,7 +387,6 @@ func (cfg *BackupConf) Clone() *BackupConf {
 type BackupTimeouts struct {
 	// Starting is timeout (in seconds) to wait for a backup to start.
 	Starting *uint32 `bson:"startingStatus,omitempty" json:"startingStatus,omitempty" yaml:"startingStatus,omitempty"`
-	Waiting *uint32 `bson:"waitingTimeout,omitempty" json:"waitingTimeout,omitempty" yaml:"waitingTimeout,omitempty"`
 }
 
 // StartingStatus returns timeout duration for .
@@ -399,14 +398,6 @@ func (t *BackupTimeouts) StartingStatus() time.Duration {
 
 	return time.Duration(*t.Starting) * time.Second
 }
-
-func (t *BackupTimeouts) WaitingTimeout() time.Duration {
-	if t == nil || t.Waiting == nil || *t.Waiting == 0 {
-		return defs.WaitOpDone
-	}
-
-	return time.Duration(*t.Waiting) * time.Second
-}	
 
 func GetConfig(ctx context.Context, m connect.Client) (*Config, error) {
 	res := m.ConfigCollection().FindOne(ctx, bson.D{{"profile", nil}})
