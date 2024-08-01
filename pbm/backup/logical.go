@@ -229,7 +229,7 @@ func dropTMPcoll(ctx context.Context, uri string) error {
 func waitForWrite(ctx context.Context, m *mongo.Client, timeout *time.Duration, ts primitive.Timestamp) error {
 	var lw primitive.Timestamp
 	var err error
-	var seconds int
+	var seconds uint32
 
 	seconds = int(timeout.Seconds())
 
