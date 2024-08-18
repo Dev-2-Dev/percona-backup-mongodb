@@ -230,7 +230,7 @@ func waitForWrite(ctx context.Context, m *mongo.Client, ts primitive.Timestamp) 
 	var lw primitive.Timestamp
 	var err error
 
-	for i := 0; i < 301; i++ {
+	for i := 0; i < 1801; i++ {
 		lw, err = topo.GetLastWrite(ctx, m, false)
 		if err == nil && lw.Compare(ts) >= 0 {
 			return nil
