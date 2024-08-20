@@ -403,7 +403,6 @@ func getNamespacesSize(ctx context.Context, m *mongo.Client, db, coll string) (m
 			}
 
 			eg, ctx := errgroup.WithContext(ctx)
-			eg.SetLimit(16)
 
 			for _, coll := range res {
 				coll := coll
