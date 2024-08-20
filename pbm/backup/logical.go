@@ -230,12 +230,12 @@ func waitForWrite(ctx context.Context, m *mongo.Client, ts primitive.Timestamp) 
 	var lw primitive.Timestamp
 	var err error
 
-	for i := 0; i < 1801; i++ {
+	for i := 0; i < 360; i++ {
 		lw, err = topo.GetLastWrite(ctx, m, false)
 		if err == nil && lw.Compare(ts) >= 0 {
 			return nil
 		}
-		time.Sleep(time.Second * 1)
+		time.Sleep(time.Second * 10)
 	}
 
 	if err != nil {
@@ -403,6 +403,7 @@ func getNamespacesSize(ctx context.Context, m *mongo.Client, db, coll string) (m
 			}
 
 			eg, ctx := errgroup.WithContext(ctx)
+			eg := eg.SetLimit(16)
 
 			for _, coll := range res {
 				coll := coll
